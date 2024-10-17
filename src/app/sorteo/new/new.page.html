@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nuevo Sorteo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (submit)="submitForm()">
+    <!-- Selección de Motivo -->
+    <ion-item>
+      <ion-label position="floating">Motivo</ion-label>
+      <ion-select [(ngModel)]="sorteo.id_motivo" name="id_motivo">
+        <ion-select-option *ngFor="let motivo of motivos" [value]="motivo.id">
+          {{ motivo.descripcion }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nombre del Sorteo</ion-label>
+      <ion-input [(ngModel)]="sorteo.nombre" name="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Fecha del Sorteo</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Total de Números</ion-label>
+      <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Precio por Número</ion-label>
+      <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero"></ion-input>
+    </ion-item>
+
+
+
+    <ion-button expand="full" type="submit">Crear Sorteo</ion-button>
+  </form>
+</ion-content>
+
+

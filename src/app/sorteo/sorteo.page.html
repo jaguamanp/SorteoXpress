@@ -1,0 +1,66 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ folder }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ folder }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+
+    <div *ngFor="let item of arrayListSorteo">
+      <ion-card>
+        <ion-card-header>
+          <!-- Título del card con el nombre del sorteo y la fecha -->
+          <ion-card-title>
+            {{ item.nombre }} - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
+          </ion-card-title>
+          
+          <!-- Botón para eliminar, con la clase delete-button -->
+          <ion-button class="delete-button" fill="clear" (click)="deleteSorteo(item.id)">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-card-header>
+    
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <ion-label><strong>Precio por número:</strong> ${{ item.precio_numero }}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label><strong>Total de números:</strong> {{ item.total_numeros }}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label><strong>Números disponibles:</strong> {{ item.cantidad_numeros_faltantes }}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label><strong>Números vendidos:</strong> {{ item.cantidad_numeros_vendidos }}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label><strong>Estado:</strong> {{ item.estado }}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label><strong>Motivo:</strong> {{ item.descripcion_motivo }}</ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+      <ion-fab-button (click)="openModal()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+</ion-content>
