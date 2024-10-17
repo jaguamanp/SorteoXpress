@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'sorteo',
     loadChildren: () => import('./sorteo/sorteo.module').then( m => m.SorteoPageModule)
+  },
+  {
+    path: 'detail-sorteo/:id',
+    loadChildren: () => import('./detail-sorteo/detail-sorteo.module').then( m => m.DetailSorteoPageModule)
   }
 ];
 

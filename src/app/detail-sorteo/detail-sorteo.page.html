@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> {{ title }} </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div *ngIf="arrayDatos">
+    <p>Total de números: {{ arrayDatos.total_numeros }}</p>
+    
+    <!-- Generar botones basados en total_numeros -->
+    <div>
+      <ion-button *ngFor="let num of getArrayFromNumber(arrayDatos.total_numeros)" 
+                  (click)="onNumeroClick(num)"> 
+                  {{ num }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

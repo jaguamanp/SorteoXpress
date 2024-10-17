@@ -12,12 +12,12 @@ export class NewModalSorteoPage implements OnInit {
   sorteo = {
     nombre: '',
     fecha_sorteo: '',
-    total_numeros: 0, // Total de números disponibles
     cantidad_numeros_vendidos: 0, // Inicia con 0
     cantidad_numeros_faltantes: 0, // Calculado en base a total - vendidos
+    total_numeros: 0, // Total de números disponibles
     precio_numero: '', // Precio por número
-    estado: 'Activo', // Estado por defecto
-    id_motivo: null // Motivo seleccionado
+    id_motivo: null, // Motivo seleccionado
+    estado: 'Activo' // Estado por defecto
   };
 
   motivos: any[] = []; // Para almacenar los motivos cargados
@@ -77,6 +77,7 @@ export class NewModalSorteoPage implements OnInit {
     this.sorteo.cantidad_numeros_faltantes = this.sorteo.total_numeros - this.sorteo.cantidad_numeros_vendidos;
 
     try {
+      console.log(this.sorteo);
       await this.databaseService.addSorteo(this.sorteo);
       const alert = await this.alertController.create({
         header: 'Éxito',

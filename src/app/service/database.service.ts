@@ -59,6 +59,8 @@ export class DatabaseService {
       // Abrir la base de datos
       await this.db.open();
 
+      ///await this.db.execute('DROP TABLE IF EXISTS sorteos');  // descomentar si se necesita borrar la tabla sorteo
+      
       // Crear las tablas si no existen
       const querySorteos = `
       CREATE TABLE IF NOT EXISTS sorteos (
@@ -163,7 +165,7 @@ export class DatabaseService {
         // Consulta que une las tablas de 'sorteos' y 'motivo' para obtener la descripción del motivo
         const query = `
           SELECT 
-            s.id, 
+            s.id AS idSorteo, 
             s.nombre, 
             s.fecha_sorteo, 
             s.total_numeros, 
@@ -180,6 +182,41 @@ export class DatabaseService {
         
         // Retornar los resultados si existen
         return res.values ? res.values : [];
+      } else {
+        console.error('Base de datos no inicializada.');
+        return [];
+      }
+    } catch (error) {
+      console.error('Error al obtener los sorteos:', error);
+      return [];
+    }
+  }
+
+
+  async getdetailSorteos(id: number): Promise<any[]> {
+    try {
+      if (this.db) {
+        // Consulta que une las tablas de 'sorteos' y 'motivo' para obtener la descripción del motivo
+        const query = `
+          SELECT 
+            s.id AS idSorteo, 
+            s.nombre, 
+            s.fecha_sorteo, 
+            s.total_numeros, 
+            s.cantidad_numeros_vendidos, 
+            s.cantidad_numeros_faltantes, 
+            s.precio_numero, 
+            s.estado, 
+            m.descripcion AS descripcion_motivo
+          FROM sorteos s
+          LEFT JOIN motivo m ON s.id_motivo = m.id
+          WHERE s.id = ${id}
+          ORDER BY s.fecha_sorteo DESC;
+        `;
+        const res = await this.db.query(query);
+        
+        // Retornar los resultados si existen
+        return res.values ? res.values[0] : null; 
       } else {
         console.error('Base de datos no inicializada.');
         return [];
