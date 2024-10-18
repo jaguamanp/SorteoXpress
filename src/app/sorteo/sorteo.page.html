@@ -17,7 +17,7 @@
   <div id="container">
 
     <div *ngFor="let item of arrayListSorteo">
-      <ion-card [routerLink]="'/detail-sorteo/'+item.idSorteo">
+      <ion-card>
         <ion-card-header>
           <!-- Título del card con el nombre del sorteo y la fecha -->
           <ion-card-title>
@@ -29,7 +29,7 @@
             <ion-icon slot="icon-only" name="close"></ion-icon>
           </ion-button>
         </ion-card-header>
-        <ion-card-content>
+        <ion-card-content [routerLink]="'/detail-sorteo/'+item.idSorteo">
           <ion-grid>
             <ion-row>
               <ion-col size="6">
@@ -56,8 +56,8 @@
       </ion-card>
     </div>
 
-    <ion-fab slot="fixed" horizontal="end" vertical="bottom">
-      <ion-fab-button (click)="openModal()">
+    <ion-fab slot="fixed" horizontal="end" vertical="bottom" style="bottom: 80px;">
+      <ion-fab-button (click)="openModal()" class="btn-color-app">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
