@@ -85,9 +85,7 @@ export class DatabaseService {
           descripcion TEXT NOT NULL,
           estado TEXT NOT NULL
         );`;
-
-        await this.db.execute('DROP TABLE IF EXISTS comprador');
-
+        
         // Crear tablas si no existen
         const queryComprador = `
         CREATE TABLE IF NOT EXISTS comprador (
@@ -172,6 +170,33 @@ export class DatabaseService {
 }
 
 
+async updateSorteo(sorteo: any) {
+  try {
+    if (this.db) {
+      const query = `
+        UPDATE sorteos SET
+          nombre = ?, 
+          fecha_sorteo = ?, 
+          id_motivo = ?
+        WHERE id = ?;
+      `;
+      const values = [
+        sorteo.nombre, 
+        sorteo.fecha_sorteo, 
+        sorteo.id_motivo,
+        sorteo.idSorteo
+      ];
+      await this.db.run(query, values);
+      console.log('Sorteo actualizado en la base de datos');
+    } else {
+      console.error('Base de datos no inicializada.');
+    }
+  } catch (error) {
+    console.error('Error al actualizar el sorteo:', error);
+  }
+}
+
+
   async deleteSorteo(id: number) {
     try {
       if (this.db) {
@@ -233,7 +258,7 @@ export class DatabaseService {
             s.cantidad_numeros_vendidos, 
             s.cantidad_numeros_faltantes, 
             s.precio_numero, 
-            s.estado, 
+            s.estado,
             m.descripcion AS descripcion_motivo,
             nc.numero_comprado,
             c.nombre_comprador

@@ -1,23 +1,23 @@
-/* Asegura que ion-card-header sea el contenedor relativo */
-ion-card > ion-card-header {
-    background-color: rgb(3, 111, 153);
-    position: relative; /* Añadir posición relativa */
-  }
-  
-  /* Estilo para el título del card */
-  ion-card-title {
-    color: white !important;
-    font-size: 16px;
-  }
-  
-  /* Estilo para el botón de eliminar */
-  .delete-button {
-    --icon-size: 24px; /* Ajusta el tamaño del icono */
-    color: rgb(3, 111, 153);
-    background-color: white;
-    position: absolute;
-    top: 0px;
-    right: 10px;
-    border-radius: 30px;
 
-  }  
+ion-card-header{
+  background-color: rgb(3, 111, 153);
+}
+
+ion-card-title{
+  --color: white !important;
+  font-size: 12px !important;
+}
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-action{
+    --background: none !important;
+    border: none !important;
+    color: white !important;
+    font-size: 12px; /* Ajusta el tamaño del ícono */
+
+  }

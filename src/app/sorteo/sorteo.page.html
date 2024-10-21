@@ -19,15 +19,15 @@
     <div *ngFor="let item of arrayListSorteo">
       <ion-card>
         <ion-card-header>
-          <!-- Título del card con el nombre del sorteo y la fecha -->
-          <ion-card-title>
-            {{ item.nombre }} - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
-          </ion-card-title>
-          
-          <!-- Botón para eliminar, con la clase delete-button -->
-          <ion-button class="delete-button" fill="clear" (click)="deleteSorteo(item.idSorteo)">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
-          </ion-button>
+          <div class="card-header">
+            <ion-card-title>
+              {{ item.nombre }} - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
+            </ion-card-title>
+            <ion-button class="btn-action" slot="end" (click)="openListAction(item.idSorteo)">
+              <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+            </ion-button>
+          </div>          
+                    
         </ion-card-header>
         <ion-card-content [routerLink]="'/detail-sorteo/'+item.idSorteo">
           <ion-grid>

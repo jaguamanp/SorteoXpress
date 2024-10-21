@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { DatabaseService } from '../../service/database.service';
+import { ActivatedRoute } from '@angular/router'; // Importar ActivatedRoute
 
 @Component({
   selector: 'app-new',
@@ -9,7 +10,10 @@ import { DatabaseService } from '../../service/database.service';
 })
 export class NewModalSorteoPage implements OnInit {
 
+  @Input() idSorteo: number = 0;
+
   sorteo = {
+    idSorteo: null,
     nombre: '',
     fecha_sorteo: '',
     cantidad_numeros_vendidos: 0, // Inicia con 0
@@ -25,15 +29,22 @@ export class NewModalSorteoPage implements OnInit {
   constructor(
     private modalController: ModalController, 
     private alertController: AlertController,
-    private databaseService: DatabaseService) {}
+    private databaseService: DatabaseService,
+    private route: ActivatedRoute,) {}
 
   ngOnInit() {
-    this.loadMotivos(); // Cargar los motivos al iniciar
+    this.loadMotivos();
+    if (this.idSorteo) {
+      this.loadSorteo(this.idSorteo);
+    }
   }
 
   dismissModal() {
     this.modalController.dismiss();
   }
+
+
+
 
   async loadMotivos() {
     try {
@@ -77,11 +88,21 @@ export class NewModalSorteoPage implements OnInit {
     this.sorteo.cantidad_numeros_faltantes = this.sorteo.total_numeros - this.sorteo.cantidad_numeros_vendidos;
 
     try {
-      console.log(this.sorteo);
-      await this.databaseService.addSorteo(this.sorteo);
+
+      let message = "";
+      if (this.sorteo.idSorteo) 
+      {
+        message = "actualizado";
+        await this.databaseService.updateSorteo(this.sorteo);
+      }else
+      {
+        message = "creado";
+        await this.databaseService.addSorteo(this.sorteo);
+
+      }
       const alert = await this.alertController.create({
         header: 'Éxito',
-        message: 'Sorteo creado correctamente.',
+        message: `Sorteo ${message} correctamente.`,
         buttons: ['OK']
       });
       await alert.present();
@@ -100,6 +121,26 @@ export class NewModalSorteoPage implements OnInit {
     const selectedDate = new Date(this.sorteo.fecha_sorteo);
     const currentDate = new Date();
     return selectedDate >= currentDate;
+  }
+
+
+
+  // editar 
+  async loadSorteo(id: number) 
+  {
+    try {
+      const sorteoData = await this.databaseService.getdetailSorteos(id); // Método para obtener el sorteo por ID
+      if (sorteoData) {
+        this.sorteo = { ...sorteoData };
+      }
+    } catch (error) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Hubo un problema al cargar los datos del sorteo.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nuevo Sorteo</ion-title>
+    <ion-title>{{ idSorteo ? 'Editar Sorteo' : 'Nuevo Sorteo' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Cerrar</ion-button>
     </ion-buttons>
@@ -30,17 +30,17 @@
 
     <ion-item>
       <ion-label position="floating">Total de Números</ion-label>
-      <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros"></ion-input>
+      <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros" [readonly]="idSorteo !== null"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Precio por Número</ion-label>
-      <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero"></ion-input>
+      <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero" [readonly]="idSorteo !== null"></ion-input>
     </ion-item>
 
 
 
-    <ion-button class="btn-color-app" expand="full" type="submit">Crear Sorteo</ion-button>
+    <ion-button class="btn-color-app" expand="full" type="submit">{{ idSorteo ? 'Editar Sorteo' : 'Guardar Sorteo' }}</ion-button>
   </form>
 </ion-content>
 
