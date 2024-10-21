@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registrar comprador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p>Números seleccionados:</p>
+  <div>
+    <ion-chip *ngFor="let num of selectedNumbers" [disabled]="true">
+      {{ num }}
+    </ion-chip>
+  </div>
+  <p>Total a pagar: ${{ totalAPagar }}</p>
+
+  <ion-item>
+    <ion-label position="floating">Nombre del comprador</ion-label>
+    <ion-input [(ngModel)]="nombreComprador"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">¿Pago completo?</ion-label>
+    <ion-checkbox [(ngModel)]="pagoCompleto" (ionChange)="onPagoCompletoChange($event)"></ion-checkbox>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Monto a pagar</ion-label>
+    <ion-input [(ngModel)]="abono" [disabled]="pagoCompleto"></ion-input>
+  </ion-item>
+
+  <ion-button class="btn-color-app" expand="full" (click)="guardar()">Guardar</ion-button>
+  <ion-button expand="full" color="danger" (click)="dismiss()">Cancelar</ion-button>
+</ion-content>
+
+

@@ -117,3 +117,9 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+
+.btn-color-app{
+  --background: rgb(3, 111, 153); /* Cambia este color por el que prefieras */
+  --color: #fff;
+}

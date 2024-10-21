@@ -42,9 +42,7 @@ export class SorteoPage implements OnInit {
 
     // Recibe los datos del modal cuando se cierre
     modal.onDidDismiss().then(async (modalData) => {
-      if (modalData !== null && modalData.data) {
-        await this.listDatos();
-      }
+      await this.listDatos();
     });
 
     return await modal.present();
@@ -71,7 +69,7 @@ export class SorteoPage implements OnInit {
               await this.databaseService.deleteSorteo(id);
       
               // Actualizar la lista de sorteos localmente
-              this.arrayListSorteo = this.arrayListSorteo.filter(sorteo => sorteo.id !== id);
+              this.arrayListSorteo = this.arrayListSorteo.filter(sorteo => sorteo.idSorteo !== id);
             } catch (error) {
               console.error('Error al eliminar el sorteo', error);
             }

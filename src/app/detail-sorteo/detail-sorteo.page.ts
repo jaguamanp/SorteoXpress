@@ -1,8 +1,8 @@
 import { Component,inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from "../service/database.service";
-import { NavController } from '@ionic/angular';
-
+import { NavController, AlertController, ModalController } from '@ionic/angular';
+import { ModalRegisterPage } from "./modal-register/modal-register.page";
 @Component({
   selector: 'app-detail-sorteo',
   templateUrl: './detail-sorteo.page.html',
@@ -12,19 +12,51 @@ export class DetailSorteoPage implements OnInit {
 
   public title = "";
   arrayDatos: any = {};
+  arrayDatosNumero: any[] = [];
+  selectedNumbers: number[] = [];
+  totalAPagar: number = 0; // Total calculado basado en los números seleccionados
+  precioNumero: number = 0; 
+  private idSorteo: number = 0;
+  selectedSegment: string = 'disponibles';
+
+
+  comprados: any[] = [];
+  noComprados: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private databaseService: DatabaseService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
-        this.getSorteoDetail(parseInt(id, 10));      
+        this.idSorteo = parseInt(id, 10);
+        this.getSorteoDetail(this.idSorteo);   
+        this.getObtenerInfoComprador(this.idSorteo);  
     } else {
       console.error('El ID del sorteo es nulo');
+    }
+  }
+
+
+  compradores: any[] = [];
+
+  async getObtenerInfoComprador(id: number)
+  {
+    try {
+      // Obtener los sorteos almacenados en SQLite
+      const sorteos = await this.databaseService.getInfoDatosComprador(id);
+      
+      // Asegúrate de que siempre se asigna un array, incluso si es vacío
+      this.compradores = sorteos || [];
+      
+    } catch (error) {
+      console.error('Error al obtener los sorteos, por favor intentelo más tarde.', error);
+      this.compradores = [];
     }
   }
 
@@ -38,8 +70,18 @@ export class DetailSorteoPage implements OnInit {
       this.arrayDatos = sorteos || [];
 
       this.title =  this.arrayDatos.nombre;
+      this.precioNumero = this.arrayDatos.precio_numero || 0;
+
+      this.arrayDatosNumero = this.arrayDatos.numeros;
+
+      // Crear array de números comprados
+      this.comprados = this.arrayDatosNumero.filter(numero => numero.comprado === true);
+
+      // Crear array de números no comprados
+      this.noComprados = this.arrayDatosNumero.filter(numero => numero.comprado === false);
+
     } catch (error) {
-      console.error('Error al obtener los sorteos desde SQLite', error);
+      console.error('Error al obtener los sorteos, por favor intentelo más tarde.', error);
       // Si ocurre un error, asegúrate de que la lista se inicialice como un array vacío
       this.arrayDatos = [];
     }
@@ -61,5 +103,66 @@ export class DetailSorteoPage implements OnInit {
     goBack() {
       this.navCtrl.back();
     }
+
+
+  
+    // Verificar si un número está seleccionado
+    isSelected(num: number): boolean {
+      return this.selectedNumbers.includes(num);
+    }
+
+    // Al hacer click en un número
+    onNumeroSelected(num: number) {
+      if (this.selectedNumbers.includes(num)) {
+        // Si el número ya está seleccionado, lo eliminamos
+        this.selectedNumbers = this.selectedNumbers.filter(n => n !== num);
+      } else {
+        // Si no está seleccionado, lo agregamos
+        this.selectedNumbers.push(num);
+        // Ordenar los números seleccionados
+        this.selectedNumbers.sort((a, b) => a - b);
+      }
+
+      // Calcular el total a pagar
+      this.calculateTotal();
+    }
+
+        // Función para calcular el total a pagar basado en los números seleccionados
+    calculateTotal() {
+      this.totalAPagar = parseFloat((this.selectedNumbers.length * this.precioNumero).toFixed(2));
+    }
+
+
+  // Mostrar formulario cuando se presione el botón flotante
+  async onShowForm() {
+    const modal = await this.modalController.create({
+      component: ModalRegisterPage, // Debes crear este componente
+      componentProps: {
+        selectedNumbers: this.selectedNumbers,
+        totalAPagar: this.totalAPagar,
+        idSorteo: this.idSorteo
+      }
+    });
+    
+    await modal.present();
+
+    modal.onDidDismiss().then(async (modalData) => {
+      this.getSorteoDetail(this.idSorteo);  
+      this.getObtenerInfoComprador(this.idSorteo);
+
+      this.selectedNumbers = [];
+    });
+  }
+
+
+
+  async mostrarNumerosComprador(comprador: any) {
+    const alert = await this.alertController.create({
+      header: 'Números comprados',
+      message: `Números: ${comprador.numeros_comprados}`,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 
 }

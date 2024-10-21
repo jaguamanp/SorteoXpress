@@ -6,18 +6,81 @@
       </ion-button>
     </ion-buttons>
     <ion-title> {{ title }} </ion-title>
-  </ion-toolbar>
-</ion-header>
-<ion-content [fullscreen]="true">
-  <div *ngIf="arrayDatos">
-    <p>Total de números: {{ arrayDatos.total_numeros }}</p>
-    
-    <!-- Generar botones basados en total_numeros -->
-    <div>
-      <ion-button *ngFor="let num of getArrayFromNumber(arrayDatos.total_numeros)" 
-                  (click)="onNumeroClick(num)"> 
-                  {{ num }}
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-segment [(ngModel)]="selectedSegment" value="disponibles">
+    <ion-segment-button value="disponibles">
+      <ion-label class="text-label">Disponibles</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="vendidas">
+      <ion-label class="text-label">Vendidos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="listComprador">
+      <ion-label class="text-label">Lista de comprador</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <br>
+  <div *ngIf="arrayDatos">
+    <!-- Mostrar los números disponibles -->
+    <div *ngIf="selectedSegment === 'disponibles' && noComprados"> 
+        <ion-chip *ngFor="let entityNumero of noComprados"
+          (click)="onNumeroSelected(entityNumero.numero)"
+          [ngClass]="{
+            'selected-button': isSelected(entityNumero.numero), 
+            'btn-color-num': !isSelected(entityNumero.numero)
+          }"
+        >
+          {{ entityNumero.numero }}  
+        </ion-chip>
+    </div>
+
+    <!-- Mostrar los números vendidos -->
+    <div *ngIf="selectedSegment === 'vendidas' && comprados">
+      <ion-list>
+        <!-- Separar *ngFor y *ngIf -->
+        <ng-container *ngFor="let entityNumero of comprados">
+          <ion-item>
+            <ion-chip>{{ entityNumero.numero }}</ion-chip>
+            <ion-label>{{ entityNumero.nombre_comprador }}</ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </div>
+
+    <div *ngIf="selectedSegment === 'listComprador' && compradores">
+      <ion-list>
+        <ion-item *ngFor="let comprador of compradores" 
+                  [ngStyle]="{ 'color': comprador.valor_a_pagar > 0 ? 'red' : 'black' }"
+                  (click)="mostrarNumerosComprador(comprador)">
+          <ion-label>
+            <h2>{{ comprador.nombre_comprador }}</h2>
+            <p>{{ comprador.pago == 1? 'Pago' : 'Abono' }}: <b>{{ comprador.abono | currency }}</b></p>
+            <p *ngIf="comprador.pago == 0">falta de pagar: <b>{{ comprador.valor_a_pagar | currency }}</b></p>
+          </ion-label>
+          <ion-badge slot="end" color="danger" *ngIf="comprador.pago == 0">
+            {{ comprador.total_pagar | currency }}
+          </ion-badge>
+          <ion-badge slot="end" color="primary" *ngIf="comprador.pago == 1">
+            Pagado
+          </ion-badge>
+        </ion-item>
+      </ion-list>
     </div>
   </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="selectedNumbers.length > 0" style="bottom: 60px;">
+    <ion-fab-button (click)="onShowForm()" class="btn-color-app">
+      <ion-icon name="create"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+

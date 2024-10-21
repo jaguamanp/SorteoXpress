@@ -25,7 +25,7 @@
 
     <ion-item>
       <ion-label position="floating">Fecha del Sorteo</ion-label>
-      <ion-datetime displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
+      <ion-datetime presentation="date" displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -40,7 +40,7 @@
 
 
 
-    <ion-button expand="full" type="submit">Crear Sorteo</ion-button>
+    <ion-button class="btn-color-app" expand="full" type="submit">Crear Sorteo</ion-button>
   </form>
 </ion-content>
 

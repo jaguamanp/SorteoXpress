@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'detail-sorteo/:id',
     loadChildren: () => import('./detail-sorteo/detail-sorteo.module').then( m => m.DetailSorteoPageModule)
+  },
+  {
+    path: 'modal-register',
+    loadChildren: () => import('./detail-sorteo/modal-register/modal-register.module').then( m => m.ModalRegisterPageModule)
   }
 ];
 
