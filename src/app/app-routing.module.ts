@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'modal-register',
     loadChildren: () => import('./detail-sorteo/modal-register/modal-register.module').then( m => m.ModalRegisterPageModule)
+  },
+  {
+    path: 'sorteo-generador/:id',
+    loadChildren: () => import('./sorteo-generador/sorteo-generador.module').then( m => m.SorteoGeneradorPageModule)
   }
 ];
 

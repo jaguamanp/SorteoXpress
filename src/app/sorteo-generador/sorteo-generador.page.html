@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Generar Ganador</ion-title>
+  </ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding center-content">
+  <div class="centrado">
+      <ion-item>
+        <ion-select [(ngModel)]="metodoGeneracion" placeholder="Seleccionar un opción...">
+          <ion-select-option value="todos">Todos los números</ion-select-option>
+          <ion-select-option value="compradores">Solo números comprados</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button (click)="generarNumero()">
+        Generar Número
+      </ion-button>
+    </div>
+    <div *ngIf="contador > 0" class="conteo-display">
+      <h1 class="titulo-conteo">{{ contador }}</h1>
+      <p class="subtitulo-conteo">¡El ganador se revelará pronto!</p>
+    </div>
+
+    <!-- Mostrar el GIF cuando el contador llega a 0  -->
+    <div *ngIf="contador === 0 && numeroGanador !== null" class="gif-background">
+      <img #gifElement src="../../assets/git/ganador.gif" alt="Ganador" class="gif-image">
+    </div> 
+
+    <div *ngIf="contador === 0 && numeroGanador !== null" class="ganador-display">
+      <h1 class="titulo-ganador">¡¡¡Ganador!!!</h1>
+      <div class="ganador-display-content">
+        <ion-badge class="numero-ganador">{{ numeroGanador }}</ion-badge>
+        <ion-label class="nombre-ganador">{{ nombreGanador || '' }}</ion-label>
+      </div>
+    </div>
+</ion-content>
+

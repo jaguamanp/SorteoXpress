@@ -1,0 +1,105 @@
+ion-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+
+
+  .centrado{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 400px; /* Para que no sea tan ancho */
+    }
+
+  .subtitulo-conteo {
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 0px;
+    text-align: center;
+  }
+  
+  .conteo-display {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: conteoAnimacion 1s ease-in-out infinite;
+  }
+  
+  .titulo-conteo {
+    margin-top: 10px;
+    font-size: 4rem;
+    color: #ff6347 !important;
+    text-align: center;
+  }
+  
+  .ganador-display {
+    margin-top: 50% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    animation: fadeIn 1s ease forwards;
+  }
+  
+  .ganador-display-content {
+    margin-top: 10px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .numero-ganador {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    background-color: gold;
+    color: white;
+  }
+  
+  .nombre-ganador {
+    font-size: 1.8rem;
+    color: #444;
+  }
+  
+  /* Animación para el conteo */
+  @keyframes conteoAnimacion {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Animación de entrada suave */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  
+  
+  /* Estilos para el GIF */
+  .gif-background {
+    position: absolute;
+    top: 2;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Detrás del contenido ganador-display */
+  }
+  
+  .gif-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cubre toda la pantalla */
+  }
+  
+  
+  

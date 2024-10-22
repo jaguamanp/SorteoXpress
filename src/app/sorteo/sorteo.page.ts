@@ -5,7 +5,7 @@ import { NewModalSorteoPage } from '../sorteo/new/new.page'; // Importa el modal
 import { ActionSheetController } from '@ionic/angular';
 import { Share } from '@capacitor/share'; // Importa el plugin Share de Capacitor
 import { DatePipe } from '@angular/common'; // Importa DatePipe
-
+import { Router } from '@angular/router'; // Importa Router para la navegación
 
 @Component({
   selector: 'app-sorteo',
@@ -26,7 +26,8 @@ export class SorteoPage implements OnInit {
     private databaseService: DatabaseService, // Inyecta el servicio de la base de datos
     private alertController: AlertController,
     private actionSheetCtrl: ActionSheetController,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {}
 
   // Método para cargar los sorteos desde SQLite
@@ -89,6 +90,14 @@ export class SorteoPage implements OnInit {
             this.compartirSorteo(idSorteo);
           }
         },
+        {
+          text: 'Generar ganador',
+          icon: 'sync-outline',
+          handler: () => {
+            this.router.navigate(['/sorteo-generador', idSorteo]);
+          }
+        },
+        
         {
           text: 'Eliminar',
           role: 'destructive',
