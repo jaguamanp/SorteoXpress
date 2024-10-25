@@ -137,9 +137,9 @@ export class SorteoPage implements OnInit {
         let nombre = sorteoData.nombre;
         let fecha = sorteoData.fecha_sorteo;
 
-        const fechaFormateada = this.datePipe.transform(fecha, 'dd/MM/yyyy');
+        //const fechaFormateada = this.datePipe.transform(fecha, 'dd/MM/yyyy');
         let listado = `Nombre del sorteo: ${nombre} \n`;
-        listado += `Fecha: ${fechaFormateada} \n`;
+        listado += `Fecha: ${fecha} \n`;
         // Recorrer la lista de números del sorteo
         for (let i = 1; i <= totalNumeros; i++) {
           const compradorInfo = sorteoData.numeros.find((num: any) => num.numero === i);
@@ -219,7 +219,7 @@ export class SorteoPage implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.listDatos();
-    }, 1000);
+    }, 500);
   }
 }
 

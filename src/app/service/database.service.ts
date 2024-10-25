@@ -197,6 +197,32 @@ async updateSorteo(sorteo: any) {
 }
 
 
+async updateSorteoComprador(sorteo: any) {
+  try {
+    if (this.db) {
+      const query = `
+        UPDATE sorteos SET
+        cantidad_numeros_vendidos = ?,
+        cantidad_numeros_faltantes = ?
+        WHERE id = ?;
+      `;
+      const values = [
+        sorteo.cantidad_numeros_vendidos, 
+        sorteo.cantidad_numeros_faltantes,
+        sorteo.idSorteo
+      ];
+      await this.db.run(query, values);
+      console.log(values);
+      console.log('Sorteo comprador actualizado en la base de datos');
+    } else {
+      console.error('Base de datos no inicializada.');
+    }
+  } catch (error) {
+    console.error('Error en el método updateSorteoComprador:', error);
+  }
+}
+
+
   async deleteSorteo(id: number) {
     try {
       if (this.db) {

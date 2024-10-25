@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-header-content">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -8,12 +8,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
 
     <div *ngFor="let item of arrayListSorteo">
@@ -21,7 +15,7 @@
         <ion-card-header>
           <div class="card-header">
             <ion-card-title>
-              {{ item.nombre }} - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
+              <b>{{ item.nombre }} </b> - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
             </ion-card-title>
             <ion-button class="btn-action" slot="end" (click)="openListAction(item.idSorteo)">
               <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>

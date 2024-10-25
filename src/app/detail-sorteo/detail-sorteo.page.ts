@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from "../service/database.service";
 import { NavController, AlertController, ModalController } from '@ionic/angular';
 import { ModalRegisterPage } from "./modal-register/modal-register.page";
+import { PublicidadService } from "../service/publicidad.service";
 @Component({
   selector: 'app-detail-sorteo',
   templateUrl: './detail-sorteo.page.html',
@@ -18,6 +19,7 @@ export class DetailSorteoPage implements OnInit {
   precioNumero: number = 0; 
   private idSorteo: number = 0;
   selectedSegment: string = 'disponibles';
+  totalNumeroSorteo: number = 0;
 
 
   comprados: any[] = [];
@@ -28,7 +30,8 @@ export class DetailSorteoPage implements OnInit {
     private databaseService: DatabaseService,
     private navCtrl: NavController,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private publicidadService: PublicidadService
   ) {}
 
   ngOnInit() {
@@ -74,6 +77,8 @@ export class DetailSorteoPage implements OnInit {
 
       this.arrayDatosNumero = this.arrayDatos.numeros;
 
+      this.totalNumeroSorteo = this.arrayDatos.total_numeros;
+
       // Crear array de números comprados
       this.comprados = this.arrayDatosNumero.filter(numero => numero.comprado === true);
 
@@ -101,6 +106,7 @@ export class DetailSorteoPage implements OnInit {
 
     // Función para volver a la página anterior
     goBack() {
+      this.publicidadService.showInterstitialAd();
       this.navCtrl.back();
     }
 
@@ -140,7 +146,8 @@ export class DetailSorteoPage implements OnInit {
       componentProps: {
         selectedNumbers: this.selectedNumbers,
         totalAPagar: this.totalAPagar,
-        idSorteo: this.idSorteo
+        idSorteo: this.idSorteo,
+        totalNumeroSorteo: this.totalNumeroSorteo
       }
     });
     

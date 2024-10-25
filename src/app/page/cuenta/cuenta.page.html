@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> Iniciar sesión</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-button expand="block" (click)="loginWithGoogle()">
+    Iniciar sesión con Google
+  </ion-button>
+</ion-content>

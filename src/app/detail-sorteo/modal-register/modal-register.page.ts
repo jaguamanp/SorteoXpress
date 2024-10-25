@@ -15,6 +15,7 @@ export class ModalRegisterPage {
   @Input() selectedNumbers: number[] = [];
   @Input() totalAPagar: number = 0;
   @Input() idSorteo: number = 0;
+  @Input() totalNumeroSorteo: number = 0;
   nombreComprador: string = '';
   abono: number = 0; // Aquí controlamos el abono como texto para validarlo
   pagoCompleto: boolean = false;
@@ -44,6 +45,15 @@ export class ModalRegisterPage {
         id_sorteo: this.idSorteo
       };
 
+
+    let restCantidadSorteo = this.totalNumeroSorteo - this.selectedNumbers.length;
+    let datosEditSorteo = {
+      cantidad_numeros_vendidos: this.selectedNumbers.length,
+      cantidad_numeros_faltantes: restCantidadSorteo,
+      idSorteo: this.idSorteo
+    };
+
+    this.databaseService.updateSorteoComprador(datosEditSorteo);
 
     // Guardar la información del comprador
     this.databaseService.guardarComprador(compradorData).then(compradorId => {

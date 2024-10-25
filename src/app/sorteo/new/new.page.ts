@@ -19,7 +19,7 @@ export class NewModalSorteoPage implements OnInit {
     cantidad_numeros_vendidos: 0, // Inicia con 0
     cantidad_numeros_faltantes: 0, // Calculado en base a total - vendidos
     total_numeros: 0, // Total de números disponibles
-    precio_numero: '', // Precio por número
+    precio_numero: 0, // Precio por número
     id_motivo: null, // Motivo seleccionado
     estado: 'Activo' // Estado por defecto
   };

@@ -1,12 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Generar Ganador</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> Generador aleatorio </ion-title>
   </ion-toolbar>
-  <ion-buttons slot="start">
-    <ion-button (click)="goBack()">
-      <ion-icon name="arrow-back"></ion-icon>
-    </ion-button>
-  </ion-buttons>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding center-content">

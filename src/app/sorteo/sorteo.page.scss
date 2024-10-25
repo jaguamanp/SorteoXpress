@@ -1,17 +1,24 @@
 
 ion-card-header{
-  background-color: rgb(3, 111, 153);
+  background-color: #0097B2 !important;
+}
+
+ion-header{
+  background-color: #0097B2 !important;
 }
 
 ion-card-title{
-  --color: white !important;
-  font-size: 12px !important;
+  --color: #FFC50D !important;
+  font-size: 20px !important;
 }
 
   .card-header {
+    --background: #0097B2 !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0px;
+    margin: 0px;
   }
 
   .btn-action{

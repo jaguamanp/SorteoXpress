@@ -27,16 +27,23 @@
       <ion-label position="floating">Fecha del Sorteo</ion-label>
       <ion-datetime presentation="date" displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
     </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Total de Números</ion-label>
+            <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros" [readonly]="idSorteo !== null"></ion-input>
+          </ion-item>
+        </ion-col>
 
-    <ion-item>
-      <ion-label position="floating">Total de Números</ion-label>
-      <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros" [readonly]="idSorteo !== null"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Precio por Número</ion-label>
-      <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero" [readonly]="idSorteo !== null"></ion-input>
-    </ion-item>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Precio por Número</ion-label>
+            <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero" [readonly]="idSorteo !== null"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
 
 
