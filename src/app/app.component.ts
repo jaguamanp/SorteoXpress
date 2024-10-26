@@ -11,8 +11,7 @@ import { PublicidadService } from './service/publicidad.service';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Mis sorteos', url: '/sorteo', icon: 'mail' },
-    { title: 'Cuenta', url: '/folder/cuenta', icon: 'paper-plane' }
+    { title: 'Mis sorteos', url: '/sorteo', icon: 'home' }
   ];
   public labels = [];
   

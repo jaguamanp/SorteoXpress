@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { DatabaseService } from '../../service/database.service';
 import { ActivatedRoute } from '@angular/router'; // Importar ActivatedRoute
-
+import { SorteoRequest } from "../../request/sorteoRequest";
 @Component({
   selector: 'app-new',
   templateUrl: './new.page.html',
@@ -12,15 +12,15 @@ export class NewModalSorteoPage implements OnInit {
 
   @Input() idSorteo: number = 0;
 
-  sorteo = {
-    idSorteo: null,
+  sorteo: SorteoRequest= {
+    idSorteo: 0,
     nombre: '',
     fecha_sorteo: '',
     cantidad_numeros_vendidos: 0, // Inicia con 0
     cantidad_numeros_faltantes: 0, // Calculado en base a total - vendidos
     total_numeros: 0, // Total de números disponibles
     precio_numero: 0, // Precio por número
-    id_motivo: null, // Motivo seleccionado
+    id_motivo: 0, // Motivo seleccionado
     estado: 'Activo' // Estado por defecto
   };
 
@@ -90,7 +90,7 @@ export class NewModalSorteoPage implements OnInit {
     try {
 
       let message = "";
-      if (this.sorteo.idSorteo) 
+      if (this.sorteo.idSorteo != 0) 
       {
         message = "actualizado";
         await this.databaseService.updateSorteo(this.sorteo);

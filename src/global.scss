@@ -35,3 +35,16 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+/**mis estilos*/
+
+ion-toolbar{
+    --background: #0097B2 !important;
+    --color: #313131;
+}
+
+.btn-sorteo{
+    --background: #FFC50D !important;
+    --color: white;
+}

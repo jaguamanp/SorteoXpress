@@ -1,19 +1,14 @@
 
 ion-card-header{
-  background-color: #0097B2 !important;
-}
-
-ion-header{
-  background-color: #0097B2 !important;
+  background-color: #FFC50D !important;
 }
 
 ion-card-title{
-  --color: #FFC50D !important;
-  font-size: 20px !important;
+  --color: #ffffff !important;
+  font-size: 18px !important;
 }
 
   .card-header {
-    --background: #0097B2 !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,3 +23,4 @@ ion-card-title{
     font-size: 12px; /* Ajusta el tamaño del ícono */
 
   }
+

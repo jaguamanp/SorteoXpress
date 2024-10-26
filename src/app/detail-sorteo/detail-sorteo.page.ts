@@ -1,15 +1,17 @@
-import { Component,inject, OnInit } from '@angular/core';
+import { Component,inject, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatabaseService } from "../service/database.service";
 import { NavController, AlertController, ModalController } from '@ionic/angular';
 import { ModalRegisterPage } from "./modal-register/modal-register.page";
 import { PublicidadService } from "../service/publicidad.service";
+import { GestureController } from '@ionic/angular';
+
 @Component({
   selector: 'app-detail-sorteo',
   templateUrl: './detail-sorteo.page.html',
   styleUrls: ['./detail-sorteo.page.scss'],
 })
-export class DetailSorteoPage implements OnInit {
+export class DetailSorteoPage implements OnInit, AfterViewInit{
 
   public title = "";
   arrayDatos: any = {};
@@ -20,6 +22,7 @@ export class DetailSorteoPage implements OnInit {
   private idSorteo: number = 0;
   selectedSegment: string = 'disponibles';
   totalNumeroSorteo: number = 0;
+  cantidadNumeroFaltante: number = 0;
 
 
   comprados: any[] = [];
@@ -31,8 +34,10 @@ export class DetailSorteoPage implements OnInit {
     private navCtrl: NavController,
     private alertController: AlertController,
     private modalController: ModalController,
-    private publicidadService: PublicidadService
+    private publicidadService: PublicidadService,
+    private gestureCtrl: GestureController
   ) {}
+
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -78,6 +83,8 @@ export class DetailSorteoPage implements OnInit {
       this.arrayDatosNumero = this.arrayDatos.numeros;
 
       this.totalNumeroSorteo = this.arrayDatos.total_numeros;
+
+      this.cantidadNumeroFaltante = this.arrayDatos.cantidad_numeros_faltantes;
 
       // Crear array de números comprados
       this.comprados = this.arrayDatosNumero.filter(numero => numero.comprado === true);
@@ -147,7 +154,8 @@ export class DetailSorteoPage implements OnInit {
         selectedNumbers: this.selectedNumbers,
         totalAPagar: this.totalAPagar,
         idSorteo: this.idSorteo,
-        totalNumeroSorteo: this.totalNumeroSorteo
+        totalNumeroSorteo: this.totalNumeroSorteo,
+        cantidadNumeroFaltante: this.cantidadNumeroFaltante
       }
     });
     
@@ -172,4 +180,43 @@ export class DetailSorteoPage implements OnInit {
     await alert.present();
   }
 
+
+  /***
+   * desplizar el dedo a la derecha o izquierda
+   */
+
+  ngAfterViewInit() {
+    const gesture = this.gestureCtrl.create({
+      el: document.querySelector('ion-content') as HTMLElement,
+      gestureName: 'swipe',
+      onMove: (event) => this.onSwipe(event)
+    });
+    gesture.enable();
+  }
+
+  onSwipe(event: any) {
+    if (event.deltaX > 50) {
+      // Deslizar hacia la derecha
+      this.previousSegment();
+    } else if (event.deltaX < -50) {
+      // Deslizar hacia la izquierda
+      this.nextSegment();
+    }
+  }
+
+  nextSegment() {
+    if (this.selectedSegment === 'disponibles') {
+      this.selectedSegment = 'vendidas';
+    } else if (this.selectedSegment === 'vendidas') {
+      this.selectedSegment = 'listComprador';
+    }
+  }
+
+  previousSegment() {
+    if (this.selectedSegment === 'listComprador') {
+      this.selectedSegment = 'vendidas';
+    } else if (this.selectedSegment === 'vendidas') {
+      this.selectedSegment = 'disponibles';
+    }
+  }
 }

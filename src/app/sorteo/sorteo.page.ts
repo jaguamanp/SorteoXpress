@@ -4,14 +4,12 @@ import { DatabaseService } from '../service/database.service'; // Importa el ser
 import { NewModalSorteoPage } from '../sorteo/new/new.page'; // Importa el modal
 import { ActionSheetController } from '@ionic/angular';
 import { Share } from '@capacitor/share'; // Importa el plugin Share de Capacitor
-import { DatePipe } from '@angular/common'; // Importa DatePipe
 import { Router } from '@angular/router'; // Importa Router para la navegación
 
 @Component({
   selector: 'app-sorteo',
   templateUrl: './sorteo.page.html',
-  styleUrls: ['./sorteo.page.scss'],
-  providers: [DatePipe]
+  styleUrls: ['./sorteo.page.scss']
 })
 export class SorteoPage implements OnInit {
 
@@ -26,13 +24,13 @@ export class SorteoPage implements OnInit {
     private databaseService: DatabaseService, // Inyecta el servicio de la base de datos
     private alertController: AlertController,
     private actionSheetCtrl: ActionSheetController,
-    private datePipe: DatePipe,
     private router: Router
   ) {}
 
   // Método para cargar los sorteos desde SQLite
   async listDatos() {
     try {
+      this.arrayListSorteo = [];
       // Obtener los sorteos almacenados en SQLite
       const sorteos = await this.databaseService.getSorteos();
       
@@ -128,6 +126,10 @@ export class SorteoPage implements OnInit {
     this.isActionSheetOpen = false;
   }
 
+  ionViewWillEnter(){
+    this.listDatos();
+  }
+
   async compartirSorteo(id: number){
     try {
 
@@ -203,7 +205,7 @@ export class SorteoPage implements OnInit {
               await this.databaseService.deleteSorteo(id);
       
               // Actualizar la lista de sorteos localmente
-              this.arrayListSorteo = this.arrayListSorteo.filter(sorteo => sorteo.idSorteo !== id);
+              this.listDatos();
             } catch (error) {
               console.error('Error al eliminar el sorteo', error);
             }
@@ -219,7 +221,7 @@ export class SorteoPage implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.listDatos();
-    }, 500);
+    }, 1000);
   }
 }
 

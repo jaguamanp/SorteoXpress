@@ -8,50 +8,55 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div id="container">
-
-    <div *ngFor="let item of arrayListSorteo">
-      <ion-card>
-        <ion-card-header>
-          <div class="card-header">
-            <ion-card-title>
-              <b>{{ item.nombre }} </b> - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
-            </ion-card-title>
-            <ion-button class="btn-action" slot="end" (click)="openListAction(item.idSorteo)">
-              <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
-            </ion-button>
-          </div>          
-                    
-        </ion-card-header>
-        <ion-card-content [routerLink]="'/detail-sorteo/'+item.idSorteo">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="6">
-                <ion-label><strong>Precio por número:</strong> ${{ item.precio_numero }}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label><strong>Total de números:</strong> {{ item.total_numeros }}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label><strong>Números disponibles:</strong> {{ item.cantidad_numeros_faltantes }}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label><strong>Números vendidos:</strong> {{ item.cantidad_numeros_vendidos }}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label><strong>Estado:</strong> {{ item.estado }}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label><strong>Motivo:</strong> {{ item.descripcion_motivo }}</ion-label>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
+  <div id="container" >
+    <div *ngIf="arrayListSorteo">
+      <div *ngFor="let item of arrayListSorteo">
+        <ion-card>
+          <ion-card-header>
+            <div class="card-header">
+              <ion-card-title>
+                <b>{{ item.nombre }} </b> - {{ item.fecha_sorteo | date: 'dd/MM/yyyy' }}
+              </ion-card-title>
+              <ion-button class="btn-action" slot="end" (click)="openListAction(item.idSorteo)">
+                <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+              </ion-button>
+            </div>          
+                      
+          </ion-card-header>
+          <ion-card-content [routerLink]="'/detail-sorteo/'+item.idSorteo" >
+            <div class="content-sorteo">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-label><strong>Precio por número:</strong> ${{ item.precio_numero }}</ion-label>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-label><strong>Total de números:</strong> {{ item.total_numeros }}</ion-label>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-label><strong>Números disponibles:</strong> {{ item.cantidad_numeros_faltantes }}</ion-label>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-label><strong>Números vendidos:</strong> {{ item.cantidad_numeros_vendidos }}</ion-label>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-label><strong>Estado:</strong> {{ item.estado }}</ion-label>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-label><strong>Motivo:</strong> {{ item.descripcion_motivo }}</ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
 
+
     <ion-fab slot="fixed" horizontal="end" vertical="bottom" style="bottom: 60px;">
-      <ion-fab-button (click)="openModal()" class="btn-color-app">
+      <ion-fab-button (click)="openModal()" class="btn-sorteo">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>

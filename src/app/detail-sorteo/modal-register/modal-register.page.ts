@@ -15,7 +15,7 @@ export class ModalRegisterPage {
   @Input() selectedNumbers: number[] = [];
   @Input() totalAPagar: number = 0;
   @Input() idSorteo: number = 0;
-  @Input() totalNumeroSorteo: number = 0;
+  @Input() cantidadNumeroFaltante: number = 0;
   nombreComprador: string = '';
   abono: number = 0; // Aquí controlamos el abono como texto para validarlo
   pagoCompleto: boolean = false;
@@ -35,7 +35,16 @@ export class ModalRegisterPage {
 
       if (this.nombreComprador.trim() == "") 
       {
-        throw new Error("El nombre del comprador es requerido");
+        throw new Error("El nombre del comprador es requerido.");
+      }
+
+      if (this.abono > this.totalAPagar ) 
+      {
+        throw new Error("El campo abono no puede ser mayor al valor a pagar.");
+      }
+
+      if (this.abono == this.totalAPagar) {
+        this.pagoCompleto = true;
       }
 
       const compradorData = {
@@ -45,29 +54,30 @@ export class ModalRegisterPage {
         id_sorteo: this.idSorteo
       };
 
-
-    let restCantidadSorteo = this.totalNumeroSorteo - this.selectedNumbers.length;
-    let datosEditSorteo = {
-      cantidad_numeros_vendidos: this.selectedNumbers.length,
-      cantidad_numeros_faltantes: restCantidadSorteo,
-      idSorteo: this.idSorteo
-    };
-
-    this.databaseService.updateSorteoComprador(datosEditSorteo);
-
     // Guardar la información del comprador
     this.databaseService.guardarComprador(compradorData).then(compradorId => {
 
         if (compradorId) 
         {
+          let countNumeros = 0;
           // Luego guardamos los números comprados
           for (let num of this.selectedNumbers) {
+            countNumeros++;
             let entityNumComprado: NumeroComprado = {
             id_comprador: compradorId, 
             numero_comprado: num 
             };
             this.databaseService.guardarNumeroComprado(entityNumComprado);
           }
+
+          let restCantidadSorteo = this.cantidadNumeroFaltante - countNumeros;
+          let datosEditSorteo = {
+            cantidad_numeros_vendidos: countNumeros,
+            cantidad_numeros_faltantes: restCantidadSorteo,
+            idSorteo: this.idSorteo
+          };
+      
+          this.databaseService.updateSorteoComprador(datosEditSorteo);
         }
         
       });
