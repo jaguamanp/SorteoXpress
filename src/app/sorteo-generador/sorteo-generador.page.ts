@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DatabaseService } from "../service/database.service";
 import { ActivatedRoute } from '@angular/router'; // Para obtener el ID de la ruta
 import { NavController } from '@ionic/angular';
-
+import { PublicidadService } from "../service/publicidad.service";
 @Component({
   selector: 'app-sorteo-generador',
   templateUrl: './sorteo-generador.page.html',
@@ -32,10 +32,13 @@ export class SorteoGeneradorPage implements OnInit {
 
   
     constructor(
+      private publicidadService: PublicidadService,
       private databaseService: DatabaseService,
       private route: ActivatedRoute,
       private navController: NavController
-    ) {}
+    ) {
+      this.publicidadService.showInterstitialAd();
+    }
   
     // Método que decide qué función ejecutar según la opción seleccionada
     generarNumero() {

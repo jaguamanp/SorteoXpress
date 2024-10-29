@@ -32,7 +32,8 @@ export class DatabaseService {
     'Lotería',
     'Becas',
     'Deportivo',
-    'Corporativo'
+    'Corporativo',
+    'Otros'
   ];
   
 
@@ -226,7 +227,10 @@ async updateSorteoComprador(sorteo: any) {
   async deleteSorteo(id: number) {
     try {
       if (this.db) {
-        const query = 'DELETE FROM sorteos WHERE id = ?';
+        const query =  `
+        UPDATE sorteos SET
+         estado = 'Inactivo'  
+         WHERE id = ?`;
         await this.db.run(query, [id]);
         console.log(`Sorteo con id ${id} eliminado de la base de datos`);
       } else {
@@ -254,6 +258,7 @@ async updateSorteoComprador(sorteo: any) {
             m.descripcion AS descripcion_motivo
           FROM sorteos s
           LEFT JOIN motivo m ON s.id_motivo = m.id
+          where s.estado = 'Activo'
           ORDER BY s.fecha_sorteo DESC;
         `;
         const res = await this.db.query(query);
@@ -285,14 +290,17 @@ async updateSorteoComprador(sorteo: any) {
             s.cantidad_numeros_faltantes, 
             s.precio_numero, 
             s.estado,
+            s.id_motivo,
             m.descripcion AS descripcion_motivo,
             nc.numero_comprado,
-            c.nombre_comprador
+            c.nombre_comprador,
+            c.id as id_comprador
           FROM sorteos s
           LEFT JOIN motivo m ON s.id_motivo = m.id
           LEFT JOIN comprador c ON s.id = c.id_sorteo
           LEFT JOIN numeros_comprados nc ON c.id = nc.id_comprador
-          WHERE s.id = ?;
+          WHERE s.id = ? AND
+          s.estado = 'Activo';
         `;
         
         const res = await this.db.query(query, [id]);
@@ -316,7 +324,8 @@ async updateSorteoComprador(sorteo: any) {
           numeros.push({
             numero: i,
             comprado: comprador ? true : false,
-            nombre_comprador: comprador ? comprador.nombre_comprador : null
+            nombre_comprador: comprador ? comprador.nombre_comprador : null,
+            id_comprador: comprador ? comprador.nombre_comprador : null
           });
         }
   
@@ -330,6 +339,7 @@ async updateSorteoComprador(sorteo: any) {
           cantidad_numeros_faltantes: sorteo.cantidad_numeros_faltantes,
           precio_numero: sorteo.precio_numero,
           estado: sorteo.estado,
+          id_motivo: sorteo.id_motivo,
           descripcion_motivo: sorteo.descripcion_motivo,
           numeros: numeros // Lista de números con el estado de compra
         };
@@ -351,6 +361,7 @@ async updateSorteoComprador(sorteo: any) {
       if (this.db) {
 
         const query = `SELECT 
+          c.id,
           c.nombre_comprador,
           c.pago,
           c.abono,
@@ -367,8 +378,11 @@ async updateSorteoComprador(sorteo: any) {
           numeros_comprados nc 
           ON nc.id_comprador = c.id
         WHERE 
-          c.id_sorteo = ?
+          c.id_sorteo = ? 
+          AND
+          s.estado = 'Activo'
         GROUP BY 
+          c.id,
           c.nombre_comprador,
           c.pago,
           c.abono;`;
@@ -460,4 +474,30 @@ async updateSorteoComprador(sorteo: any) {
         console.error('Error al guardar el número comprado:', error);
       }
     }
+
+
+    async editarComprador(comprador: { id: number, pago: boolean, abono: number }) {
+      try {
+        if (this.db) {
+          const query = `
+            UPDATE comprador SET 
+              pago = ?, 
+              abono = (abono + ?)
+            WHERE id = ?;
+          `;
+          const values = [
+            comprador.pago ? 1 : 0,  // 1 para true y 0 para false
+            comprador.abono,
+            comprador.id
+          ];
+          await this.db.run(query, values);
+          console.log(`Comprador con id ${comprador.id} actualizado correctamente.`);
+        } else {
+          console.error('Base de datos no inicializada.');
+        }
+      } catch (error) {
+        console.error('Error al editar el comprador:', error);
+      }
+    }
+    
 }

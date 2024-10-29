@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Registrar comprador</ion-title>
+    <ion-title>{{ isEditing ? 'Editar' : 'Registrar' }} comprador</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">Cerrar</ion-button>
     </ion-buttons>
@@ -18,7 +18,7 @@
 
   <ion-item>
     <ion-label position="floating">Nombre del comprador</ion-label>
-    <ion-input [(ngModel)]="nombreComprador"></ion-input>
+    <ion-input [(ngModel)]="nombreComprador" [disabled]="isEditing"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -28,11 +28,18 @@
 
   <ion-item>
     <ion-label position="floating">Monto a pagar</ion-label>
-    <ion-input [(ngModel)]="abono" [disabled]="pagoCompleto"></ion-input>
+    <ion-input [(ngModel)]="abono" [disabled]="pagoCompleto" onkeypress="onAbonoInput($event)"></ion-input>
   </ion-item>
-
-  <ion-button class="btn-sorteo" expand="full" (click)="guardar()">Guardar</ion-button>
-  <ion-button expand="full" color="danger" (click)="dismiss()">Cancelar</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button class="btn-color-success" (click)="guardar()" expand="full" type="submit">{{ isEditing ? 'Editar' : 'Guardar' }}</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="full" color="danger" (click)="dismiss()">Cancelar  <ion-icon name="close-circle-outline"></ion-icon></ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 

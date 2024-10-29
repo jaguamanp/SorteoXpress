@@ -2,50 +2,75 @@
   <ion-toolbar>
     <ion-title>{{ idSorteo ? 'Editar Sorteo' : 'Nuevo Sorteo' }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismissModal()">Cerrar</ion-button>
+      <ion-button (click)="dismissModal()">
+        Cerrar
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <form (submit)="submitForm()">
-    <!-- Selección de Motivo -->
-    <ion-item>
-      <ion-label position="floating">Motivo</ion-label>
-      <ion-select [(ngModel)]="sorteo.id_motivo" name="id_motivo">
-        <ion-select-option *ngFor="let motivo of motivos" [value]="motivo.id">
-          {{ motivo.descripcion }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Nombre del Sorteo</ion-label>
-      <ion-input [(ngModel)]="sorteo.nombre" name="nombre"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Fecha del Sorteo</ion-label>
-      <ion-datetime presentation="date" displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
-    </ion-item>
+    
     <ion-grid>
       <ion-row>
         <ion-col size="6">
           <ion-item>
+            <ion-label position="floating">Motivo</ion-label>
+            <ion-select [(ngModel)]="sorteo.id_motivo" name="id_motivo">
+              <ion-select-option *ngFor="let motivo of motivos" [value]="motivo.id">
+                {{ motivo.descripcion }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Nombre del Sorteo</ion-label>
+            <ion-input [(ngModel)]="sorteo.nombre" name="nombre"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-item>
+      <ion-label position="floating">Fecha del Sorteo</ion-label>
+      <ion-datetime presentation="date" displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
+    </ion-item>
+    <ion-grid *ngIf="sorteo.cantidad_numeros_vendidos == 0">
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
             <ion-label position="floating">Total de Números</ion-label>
-            <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros" [readonly]="idSorteo !== null"></ion-input>
+            <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col size="6">
           <ion-item>
             <ion-label position="floating">Precio por Número</ion-label>
-            <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero" [readonly]="idSorteo !== null"></ion-input>
+            <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
+    <ion-item *ngIf="sorteo.cantidad_numeros_vendidos != 0">
+      <ion-label color="medium" class="ion-text-wrap">
+        Nota: Una vez que se ha vendido el primer número, no es posible editar la cantidad total de números ni el precio por número. Esto asegura la integridad de la venta.
+      </ion-label>
+    </ion-item>
 
-    <ion-button ngClass="'btn-color-app'" expand="full" type="submit">{{ idSorteo ? 'Editar Sorteo' : 'Guardar Sorteo' }}</ion-button>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button class="btn-color-success" expand="full" type="submit">{{ idSorteo ? 'Editar Sorteo' : 'Guardar Sorteo' }}</ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="full" color="danger" (click)="dismissModal()">Cancelar    <ion-icon name="close-circle-outline"></ion-icon></ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
   </form>
 </ion-content>
 

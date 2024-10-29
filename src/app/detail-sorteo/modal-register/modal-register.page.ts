@@ -1,6 +1,3 @@
-
-
-
 import { Component, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { DatabaseService } from "../../service/database.service";
@@ -16,7 +13,13 @@ export class ModalRegisterPage {
   @Input() totalAPagar: number = 0;
   @Input() idSorteo: number = 0;
   @Input() cantidadNumeroFaltante: number = 0;
-  nombreComprador: string = '';
+
+
+  // editar 
+  @Input() isEditing: boolean = false;
+  @Input() compradorId: number = 0;
+
+  @Input() nombreComprador: string = '';
   abono: number = 0; // Aquí controlamos el abono como texto para validarlo
   pagoCompleto: boolean = false;
 
@@ -33,58 +36,76 @@ export class ModalRegisterPage {
 
     try {
 
-      if (this.nombreComprador.trim() == "") 
-      {
-        throw new Error("El nombre del comprador es requerido.");
-      }
+      let mensaje = '';
 
-      if (this.abono > this.totalAPagar ) 
-      {
-        throw new Error("El campo abono no puede ser mayor al valor a pagar.");
-      }
-
-      if (this.abono == this.totalAPagar) {
-        this.pagoCompleto = true;
-      }
-
-      const compradorData = {
-        nombre_comprador: this.nombreComprador,
-        pago: this.pagoCompleto,
-        abono: this.abono,
-        id_sorteo: this.idSorteo
-      };
-
-    // Guardar la información del comprador
-    this.databaseService.guardarComprador(compradorData).then(compradorId => {
-
-        if (compradorId) 
+        if (this.nombreComprador.trim() == "") 
         {
-          let countNumeros = 0;
-          // Luego guardamos los números comprados
-          for (let num of this.selectedNumbers) {
-            countNumeros++;
-            let entityNumComprado: NumeroComprado = {
-            id_comprador: compradorId, 
-            numero_comprado: num 
-            };
-            this.databaseService.guardarNumeroComprado(entityNumComprado);
-          }
-
-          let restCantidadSorteo = this.cantidadNumeroFaltante - countNumeros;
-          let datosEditSorteo = {
-            cantidad_numeros_vendidos: countNumeros,
-            cantidad_numeros_faltantes: restCantidadSorteo,
-            idSorteo: this.idSorteo
-          };
-      
-          this.databaseService.updateSorteoComprador(datosEditSorteo);
+          throw new Error("El nombre del comprador es requerido.");
         }
+  
+        if (this.abono > this.totalAPagar ) 
+        {
+          throw new Error("El campo abono no puede ser mayor al valor a pagar.");
+        }
+  
+        if (this.abono == this.totalAPagar) {
+          this.pagoCompleto = true;
+        }
+
+        if (this.pagoCompleto) {
+          this.abono = this.totalAPagar;
+        }
+
+      if (this.isEditing) {
+        // Validar y actualizar comprador existente
+        await this.databaseService.editarComprador({
+          id: this.compradorId,
+          pago: this.pagoCompleto,
+          abono: this.abono
+        });
+        console.log('Comprador actualizado correctamente.');
+
+        mensaje = `Comprador ${this.nombreComprador} actualizado correctamente.`;
+      }else{
+          const compradorData = {
+            nombre_comprador: this.nombreComprador,
+            pago: this.pagoCompleto,
+            abono: this.abono,
+            id_sorteo: this.idSorteo
+          };
+
+
+              // Guardar la información del comprador
+      this.databaseService.guardarComprador(compradorData).then(compradorId => {
+
+          if (compradorId) 
+          {
+            let countNumeros = 0;
+            // Luego guardamos los números comprados
+            for (let num of this.selectedNumbers) {
+              countNumeros++;
+              let entityNumComprado: NumeroComprado = {
+              id_comprador: compradorId, 
+              numero_comprado: num 
+              };
+              this.databaseService.guardarNumeroComprado(entityNumComprado);
+            }
+
+            let restCantidadSorteo = this.cantidadNumeroFaltante - countNumeros;
+            let datosEditSorteo = {
+              cantidad_numeros_vendidos: countNumeros,
+              cantidad_numeros_faltantes: restCantidadSorteo,
+              idSorteo: this.idSorteo
+            };
         
-      });
+            this.databaseService.updateSorteoComprador(datosEditSorteo);
+          }
+          
+        });
 
-      const mensaje = `${this.nombreComprador} ha comprado los siguientes números: ${this.selectedNumbers.join(', ')} correctamente`;
+        mensaje = `${this.nombreComprador} ha comprado los siguientes números: ${this.selectedNumbers.join(', ')} correctamente`;
+      }
 
-      // Mostrar alerta de éxito después de guardar todos los números
       const alert = await this.alertController.create({
         header: 'Éxito',
         message: mensaje,

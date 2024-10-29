@@ -172,12 +172,43 @@ export class DetailSorteoPage implements OnInit, AfterViewInit{
 
 
   async mostrarNumerosComprador(comprador: any) {
-    const alert = await this.alertController.create({
-      header: 'Números comprados',
-      message: `Números: ${comprador.numeros_comprados}`,
-      buttons: ['OK']
-    });
-    await alert.present();
+
+    if (comprador.pago == 1) {
+      const alert = await this.alertController.create({
+        header: 'Números comprados',
+        message: `Números: ${comprador.numeros_comprados}`,
+        buttons: ['OK']
+      });
+      await alert.present();
+    } else 
+    {
+      let arr = comprador.numeros_comprados.split(",").map(Number);
+
+      const modal = await this.modalController.create({
+        component: ModalRegisterPage, // Debes crear este componente
+        componentProps: {
+          selectedNumbers: arr,
+          totalAPagar: comprador.valor_a_pagar,//comprador.total_pagar,
+          //valorAPagar: comprador.valor_a_pagar,
+          idSorteo: this.idSorteo,
+          totalNumeroSorteo: this.totalNumeroSorteo,
+          nombreComprador: comprador.nombre_comprador,
+          compradorId: comprador.id,
+          isEditing: true,
+
+        }
+      });
+      
+      await modal.present();
+  
+      modal.onDidDismiss().then(async (modalData) => {
+        this.getSorteoDetail(this.idSorteo);  
+        this.getObtenerInfoComprador(this.idSorteo);
+  
+        this.selectedNumbers = [];
+      });
+      
+    }
   }
 
 
