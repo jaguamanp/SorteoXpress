@@ -203,7 +203,7 @@ async updateSorteoComprador(sorteo: any) {
     if (this.db) {
       const query = `
         UPDATE sorteos SET
-        cantidad_numeros_vendidos = ?,
+        cantidad_numeros_vendidos = (cantidad_numeros_vendidos + ?),
         cantidad_numeros_faltantes = ?
         WHERE id = ?;
       `;

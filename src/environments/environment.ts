@@ -6,8 +6,7 @@ export const environment = {
   production: false,
   adMobConfig: {
     interstitialAdId: 'ca-app-pub-3940256099942544/1033173712', // ID de prueba
-    bannerAdId: 'ca-app-pub-3940256099942544/6300978111', // ID de prueba de banner
-    rewardedAdId: 'ca-app-pub-3940256099942544/5224354917' // ID de prueba de anuncios recompensados
+    bannerAdId: 'ca-app-pub-3940256099942544/6300978111' // ID de prueba de banner
   }
 };
 
