@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { DatabaseService } from './service/database.service';
 import { Platform } from '@ionic/angular';
-import { AdMob, BannerAdSize, BannerAdPosition, InterstitialAdPluginEvents } from '@capacitor-community/admob';
-import { environment } from "../environments/environment";
 import { PublicidadService } from './service/publicidad.service';
 @Component({
   selector: 'app-root',

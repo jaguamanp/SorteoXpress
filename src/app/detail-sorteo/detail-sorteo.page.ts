@@ -36,10 +36,13 @@ export class DetailSorteoPage implements OnInit, AfterViewInit{
     private modalController: ModalController,
     private publicidadService: PublicidadService,
     private gestureCtrl: GestureController
-  ) {}
+  ) {
+    this.publicidadService.showInterstitialAd();
+  }
 
 
   ngOnInit() {
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
         this.idSorteo = parseInt(id, 10);

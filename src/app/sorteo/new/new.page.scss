@@ -4,3 +4,10 @@
 ion-buttons>ion-button{
     --background: #ffffff00 !important;
 }
+
+
+ion-input{
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 20px;
+}

@@ -30,6 +30,12 @@ export class PublicidadService {
   }
 
 
+  async ocultarBanner()
+  {
+    await AdMob.hideBanner();
+  }
+
+
   async showInterstitialAd() {
     try {
       AdMob.initialize();

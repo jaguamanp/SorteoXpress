@@ -25,8 +25,9 @@ export class SorteoPage implements OnInit {
     private alertController: AlertController,
     private actionSheetCtrl: ActionSheetController,
     private router: Router
-  ) {}
-
+  ) {
+    
+  }
   // Método para cargar los sorteos desde SQLite
   async listDatos() {
     try {

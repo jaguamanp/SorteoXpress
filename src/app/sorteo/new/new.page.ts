@@ -3,6 +3,9 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { DatabaseService } from '../../service/database.service';
 import { ActivatedRoute } from '@angular/router'; // Importar ActivatedRoute
 import { SorteoRequest } from "../../request/sorteoRequest";
+import { PublicidadService } from '../../service/publicidad.service';
+import { Platform } from '@ionic/angular';
+
 @Component({
   selector: 'app-new',
   templateUrl: './new.page.html',
@@ -30,7 +33,10 @@ export class NewModalSorteoPage implements OnInit {
     private modalController: ModalController, 
     private alertController: AlertController,
     private databaseService: DatabaseService,
-    private route: ActivatedRoute,) {}
+    private route: ActivatedRoute,
+    private publicidadService: PublicidadService,
+    private platform: Platform
+  ) {}
 
   ngOnInit() {
     this.loadMotivos();
@@ -54,7 +60,8 @@ export class NewModalSorteoPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Error',
         message: 'No se pudieron cargar los motivos.',
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: 'custom-alert'
       });
       await alert.present();
     }
@@ -63,11 +70,24 @@ export class NewModalSorteoPage implements OnInit {
   async submitForm() {
 
     // Validación de campos vacíos
-    if (!this.sorteo.nombre || !this.sorteo.fecha_sorteo || !this.sorteo.total_numeros || !this.sorteo.precio_numero || !this.sorteo.id_motivo) {
+    if (!this.sorteo.nombre || !this.sorteo.fecha_sorteo || !this.sorteo.total_numeros || !this.sorteo.precio_numero || !this.sorteo.id_motivo) 
+    {
+      await this.publicidadService.ocultarBanner();
       const alert = await this.alertController.create({
         header: 'Campos incompletos',
         message: 'Por favor, complete todos los campos antes de enviar.',
-        buttons: ['OK']
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+
+              setTimeout(async () => {
+                await this.publicidadService.showBannerAd();
+              }, 500);                
+            }
+          }
+        ],
+        cssClass: 'custom-alert'
       });
       await alert.present();
       return;
@@ -78,7 +98,8 @@ export class NewModalSorteoPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Fecha inválida',
         message: 'La fecha del sorteo no puede ser anterior a la fecha actual.',
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: 'custom-alert'
       });
       await alert.present();
       return;
@@ -103,7 +124,8 @@ export class NewModalSorteoPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Éxito',
         message: `Sorteo ${message} correctamente.`,
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: 'custom-alert'
       });
       await alert.present();
       this.modalController.dismiss(this.sorteo);
@@ -111,7 +133,8 @@ export class NewModalSorteoPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Error',
         message: 'Hubo un problema al crear el sorteo. Inténtelo nuevamente.',
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: 'custom-alert'
       });
       await alert.present();
     }

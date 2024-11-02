@@ -27,7 +27,7 @@
         <ion-col size="6">
           <ion-item>
             <ion-label position="floating">Nombre del Sorteo</ion-label>
-            <ion-input [(ngModel)]="sorteo.nombre" name="nombre"></ion-input>
+            <ion-input [(ngModel)]="sorteo.nombre" name="nombre" maxlength="50"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -63,7 +63,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6">
-          <ion-button class="btn-color-success" expand="full" type="submit">{{ idSorteo ? 'Editar Sorteo' : 'Guardar Sorteo' }}</ion-button>
+          <ion-button class="btn-color-success" expand="full" type="submit">{{ idSorteo ? 'Editar' : 'Guardar' }}</ion-button>
         </ion-col>
         <ion-col size="6">
           <ion-button expand="full" color="danger" (click)="dismissModal()">Cancelar    <ion-icon name="close-circle-outline"></ion-icon></ion-button>
