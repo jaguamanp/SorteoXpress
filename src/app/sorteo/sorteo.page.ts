@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { DatabaseService } from '../service/database.service'; // Importa el servicio de SQLite
 import { NewModalSorteoPage } from '../sorteo/new/new.page'; // Importa el modal
 import { ActionSheetController } from '@ionic/angular';
 import { Share } from '@capacitor/share'; // Importa el plugin Share de Capacitor
 import { Router } from '@angular/router'; // Importa Router para la navegación
+import { TutorialPopoverComponent } from '../tutorial-popover/tutorial-popover.component';
+import { PopoverController } from '@ionic/angular';
+import { PublicidadService } from "../service/publicidad.service";
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-sorteo',
@@ -15,16 +19,25 @@ export class SorteoPage implements OnInit {
 
   public folder: string = "Mis Sorteos";
 
+  @ViewChild('fabTrigger', { static: false }) fabTrigger: ElementRef | undefined;
+
+
   arrayListSorteo: any[] = [];
 
   listadoNumeros: string = '';
+
+  boolvalideBienvenida: boolean= false;
+
+  currentStep = 0;
 
   constructor(
     private modalController: ModalController,
     private databaseService: DatabaseService, // Inyecta el servicio de la base de datos
     private alertController: AlertController,
     private actionSheetCtrl: ActionSheetController,
-    private router: Router
+    private router: Router,
+    private popoverController: PopoverController,
+    private publicidadService: PublicidadService
   ) {
     
   }
@@ -93,7 +106,10 @@ export class SorteoPage implements OnInit {
           text: 'Generar ganador',
           icon: 'sync-outline',
           handler: () => {
-            this.router.navigate(['/sorteo-generador', idSorteo]);
+
+            this.publicidadService.showInterstitialAd().then(() => {
+              this.router.navigate(['/sorteo-generador', idSorteo]);
+            });
           }
         },
         
@@ -220,10 +236,48 @@ export class SorteoPage implements OnInit {
 
   // Método que se ejecuta al inicializar la página
   ngOnInit() {
+
+    //const hasSeenTutorial = localStorage.getItem('valideBienvenida');
     setTimeout(() => {
       this.listDatos();
     }, 1000);
   }
+
+
+  //eliminar
+  async showPopover() {
+    // Verifica si `fabTrigger` está definido
+    if (this.fabTrigger && this.fabTrigger.nativeElement) {
+      const rect = this.fabTrigger.nativeElement.getBoundingClientRect();
+
+      const popover = await this.popoverController.create({
+        component: TutorialPopoverComponent,
+        componentProps: { message: 'Crea tu primer sorteo' },
+        translucent: true,
+        cssClass: 'custom-popover',
+        event: {
+          clientX: rect.left + rect.width / 2,
+          clientY: rect.top + rect.height / 2,
+        } as MouseEvent,
+      });
+      await popover.present();
+    } else {
+      console.error('fabTrigger no está disponible en el DOM.');
+    }
+  }
+
+
+  detailContentSorteo(id: number){
+    this.publicidadService.showInterstitialAd().then(() => {
+      // Redirige a la página deseada después de cerrar el anuncio
+      this.router.navigate(['/detail-sorteo/'+id]);
+    });
+  }
+
+  async openPrivacyPolicy() {
+    await Browser.open({ url: 'https://www.termsfeed.com/live/6c9c0004-793a-471a-b690-58a8184ffec3' });
+  }
+
 }
 
 

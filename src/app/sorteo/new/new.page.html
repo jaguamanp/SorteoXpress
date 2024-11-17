@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ idSorteo ? 'Editar Sorteo' : 'Nuevo Sorteo' }}</ion-title>
+    <ion-title><b>{{ idSorteo ? 'Editar Sorteo' : 'Nuevo Sorteo' }}</b></ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">
         Cerrar
@@ -9,33 +9,55 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scroll-y="true">
   <form (submit)="submitForm()">
     
     <ion-grid>
       <ion-row>
-        <ion-col size="6">
+        <ion-col size="12">
           <ion-item>
-            <ion-label position="floating">Motivo</ion-label>
+            <ion-label position="floating">Motivo:</ion-label>
             <ion-select [(ngModel)]="sorteo.id_motivo" name="id_motivo">
+              <ion-select-option [value]="0">Seleccione un motivo...</ion-select-option>
               <ion-select-option *ngFor="let motivo of motivos" [value]="motivo.id">
                 {{ motivo.descripcion }}
               </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="6">
+        <ion-col size="12">
           <ion-item>
-            <ion-label position="floating">Nombre del Sorteo</ion-label>
-            <ion-input [(ngModel)]="sorteo.nombre" name="nombre" maxlength="50"></ion-input>
+            <ion-label position="floating">Nombre del sorteo:</ion-label>
+            <ion-input 
+            [(ngModel)]="sorteo.nombre" 
+            name="nombre"
+            presentation="alert"
+            maxlength="50"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label>Fecha del Sorteo:</ion-label>
+            <ion-datetime-button datetime="datetime">
+            </ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime 
+                id="datetime"
+                [value]="sorteo.fecha_sorteo"
+                display-format="DD/MM/YYYY"
+                presentation="date"
+                (ionChange)="onDateSelected($event)"
+                
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-item>
-      <ion-label position="floating">Fecha del Sorteo</ion-label>
-      <ion-datetime presentation="date" displayFormat="DD MMM YYYY" [(ngModel)]="sorteo.fecha_sorteo" name="fecha_sorteo"></ion-datetime>
-    </ion-item>
+    
     <ion-grid *ngIf="sorteo.cantidad_numeros_vendidos == 0">
       <ion-row>
         <ion-col size="6">
@@ -44,11 +66,10 @@
             <ion-input type="number" [(ngModel)]="sorteo.total_numeros" name="total_numeros"></ion-input>
           </ion-item>
         </ion-col>
-
         <ion-col size="6">
           <ion-item>
-            <ion-label position="floating">Precio por Número</ion-label>
-            <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero"></ion-input>
+            <ion-label position="floating">Valor por Número</ion-label>
+            <ion-input type="number" [(ngModel)]="sorteo.precio_numero" name="precio_numero" placeholder="$1.50"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

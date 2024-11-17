@@ -18,11 +18,11 @@ export class NewModalSorteoPage implements OnInit {
   sorteo: SorteoRequest= {
     idSorteo: 0,
     nombre: '',
-    fecha_sorteo: '',
+    fecha_sorteo: new Date().toISOString(),
     cantidad_numeros_vendidos: 0, // Inicia con 0
     cantidad_numeros_faltantes: 0, // Calculado en base a total - vendidos
-    total_numeros: 0, // Total de números disponibles
-    precio_numero: 0, // Precio por número
+    total_numeros: null, // Total de números disponibles
+    precio_numero: null, // Precio por número
     id_motivo: 0, // Motivo seleccionado
     estado: 'Activo' // Estado por defecto
   };
@@ -67,31 +67,87 @@ export class NewModalSorteoPage implements OnInit {
     }
   }
 
-  async submitForm() {
-
-    // Validación de campos vacíos
-    if (!this.sorteo.nombre || !this.sorteo.fecha_sorteo || !this.sorteo.total_numeros || !this.sorteo.precio_numero || !this.sorteo.id_motivo) 
-    {
-      await this.publicidadService.ocultarBanner();
-      const alert = await this.alertController.create({
-        header: 'Campos incompletos',
-        message: 'Por favor, complete todos los campos antes de enviar.',
-        buttons: [
-          {
-            text: 'OK',
-            handler: () => {
-
-              setTimeout(async () => {
-                await this.publicidadService.showBannerAd();
-              }, 500);                
+  async submitForm() 
+  {
+    if (!this.sorteo.id_motivo) 
+      {
+        const alert = await this.alertController.create({
+          header: 'Campo incompleto',
+          message: 'El campo motivo es requerido.',
+          buttons: [
+            {
+              text: 'OK'
             }
+          ],
+          cssClass: 'custom-alert'
+        });
+        await alert.present();
+        return;
+      }
+
+      if (!this.sorteo.nombre) 
+      {
+          const alert = await this.alertController.create({
+            header: 'Campo incompleto',
+            message: 'El campo nombre sorteo es requerido.',
+            buttons: [
+              {
+                text: 'OK'
+              }
+            ],
+            cssClass: 'custom-alert'
+          });
+          await alert.present();
+          return;
+      }
+
+      if (!this.sorteo.fecha_sorteo) 
+        {
+            const alert = await this.alertController.create({
+              header: 'Campo incompleto',
+              message: 'El campo fecha de sorteo es requerido.',
+              buttons: [
+                {
+                  text: 'OK'
+                }
+              ],
+              cssClass: 'custom-alert'
+            });
+            await alert.present();
+            return;
+        }
+
+        if (!this.sorteo.total_numeros) 
+          {
+              const alert = await this.alertController.create({
+                header: 'Campos incompletos',
+                message: 'El campo total de números es requerido.',
+                buttons: [
+                  {
+                    text: 'OK'
+                  }
+                ],
+                cssClass: 'custom-alert'
+              });
+              await alert.present();
+              return;
           }
-        ],
-        cssClass: 'custom-alert'
-      });
-      await alert.present();
-      return;
-    }
+
+          if (!this.sorteo.precio_numero) 
+            {
+                const alert = await this.alertController.create({
+                  header: 'Campos incompletos',
+                  message: 'El valor del número es requerido.',
+                  buttons: [
+                    {
+                      text: 'OK'
+                    }
+                  ],
+                  cssClass: 'custom-alert'
+                });
+                await alert.present();
+                return;
+            }
 
     // Validación de la fecha
     if (!this.validateDate()) {
@@ -143,6 +199,10 @@ export class NewModalSorteoPage implements OnInit {
   validateDate(): boolean {
     const selectedDate = new Date(this.sorteo.fecha_sorteo);
     const currentDate = new Date();
+
+      // Configuramos ambas fechas a medianoche para comparar solo las fechas
+    selectedDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
     return selectedDate >= currentDate;
   }
 
@@ -164,6 +224,11 @@ export class NewModalSorteoPage implements OnInit {
       });
       await alert.present();
     }
+  }
+
+
+  onDateSelected(event: any) {
+    this.sorteo.fecha_sorteo = event.detail.value;
   }
 }
 

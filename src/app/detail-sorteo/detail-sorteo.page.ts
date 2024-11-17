@@ -37,7 +37,6 @@ export class DetailSorteoPage implements OnInit, AfterViewInit{
     private publicidadService: PublicidadService,
     private gestureCtrl: GestureController
   ) {
-    this.publicidadService.showInterstitialAd();
   }
 
 
@@ -116,8 +115,10 @@ export class DetailSorteoPage implements OnInit, AfterViewInit{
 
     // Función para volver a la página anterior
     goBack() {
-      this.publicidadService.showInterstitialAd();
-      this.navCtrl.back();
+      this.publicidadService.showInterstitialAd().then(() =>{
+        this.navCtrl.back();
+      });
+      
     }
 
 

@@ -9,6 +9,16 @@
 
 <ion-content [fullscreen]="true">
   <div id="container" >
+    <div *ngIf="this.arrayListSorteo.length == 0">
+        <div class="welcome-container">
+          <ion-icon name="gift-outline" class="welcome-icon"></ion-icon>
+          <h1 class="welcome-title">¡Bienvenido a <span class="app-name">SorteoXpress</span>!</h1>
+          <p class="welcome-message">
+            ¡Aquí puedes gestionar todos tus sorteos de manera sencilla! Configura la cantidad de números a vender, su valor, selecciona los números que deseas asignar, genera un ganador y comparte el resultado con facilidad. 💸
+          </p>
+          <p class="highlight-message">💥 ¿Listo para organizar tu próximo gran sorteo? 💥</p>
+        </div>
+    </div>
     <div *ngIf="arrayListSorteo">
       <div *ngFor="let item of arrayListSorteo">
         <ion-card>
@@ -23,7 +33,7 @@
             </div>          
                       
           </ion-card-header>
-          <ion-card-content [routerLink]="'/detail-sorteo/'+item.idSorteo" >
+          <ion-card-content (click)="detailContentSorteo(item.idSorteo)" >
             <div class="content-sorteo">
               <ion-grid>
                 <ion-row>
@@ -55,10 +65,18 @@
     </div>
 
 
-    <ion-fab slot="fixed" horizontal="end" vertical="bottom" style="bottom: 60px;">
-      <ion-fab-button (click)="openModal()" class="btn-sorteo">
+    <ion-fab #fabTrigger slot="fixed" horizontal="end" vertical="bottom" style="bottom: 60px;">
+      <ion-fab-button  (click)="openModal()" class="btn-sorteo">
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </div>
+
+  <ion-footer class="footer-policy">
+    <ion-toolbar>
+      <ion-text color="medium" class="ion-text-center">
+        <a (click)="openPrivacyPolicy()" class="privacy-link">Política de Privacidad</a>
+      </ion-text>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>

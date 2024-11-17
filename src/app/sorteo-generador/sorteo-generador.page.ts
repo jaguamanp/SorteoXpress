@@ -37,7 +37,6 @@ export class SorteoGeneradorPage implements OnInit {
       private route: ActivatedRoute,
       private navController: NavController
     ) {
-      this.publicidadService.showInterstitialAd();
     }
   
     // Método que decide qué función ejecutar según la opción seleccionada
