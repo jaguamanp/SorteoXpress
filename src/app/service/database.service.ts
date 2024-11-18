@@ -63,8 +63,11 @@ export class DatabaseService {
       // Abrir la base de datos
       await this.db.open();
 
-      ///await this.db.execute('DROP TABLE IF EXISTS sorteos');  // descomentar si se necesita borrar la tabla sorteo
-      
+      //await this.db.execute('DROP TABLE IF EXISTS numeros_comprados');  // descomentar si se necesita borrar la tabla sorteo
+      //await this.db.execute('DROP TABLE IF EXISTS comprador');  // descomentar si se necesita borrar la tabla sorteo
+      //await this.db.execute('DROP TABLE IF EXISTS motivo');  // descomentar si se necesita borrar la tabla sorteo
+      //await this.db.execute('DROP TABLE IF EXISTS sorteos');  // descomentar si se necesita borrar la tabla sorteo
+
       // Crear las tablas si no existen
       const querySorteos = `
       CREATE TABLE IF NOT EXISTS sorteos (
@@ -82,6 +85,7 @@ export class DatabaseService {
 
       const queryMotivos = `
         CREATE TABLE IF NOT EXISTS motivo (
+
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           descripcion TEXT NOT NULL,
           estado TEXT NOT NULL
